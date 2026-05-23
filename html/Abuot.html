@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Responsive Tailwind Navbar</title>
-  <link rel="stylesheet" href="./src/output.css">
+  <link rel="stylesheet" href="../src/output.css">
 </head>
 <body class="bg-gray-100">
     <nav class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 shadow-lg">
@@ -12,21 +12,22 @@
       <div class="flex justify-between h-16 items-center">
         <!-- Logo -->
         <div class="flex-shrink-0 text-white text-4xl font-bold hover:text-yellow-300 transition">
-          <a href="../index.html" class="hover:text-yellow-300 transition font-bold text-2xl">LOOK AT Me</a>
+          <a href="#" class="hover:text-yellow-300 transition font-bold text-2xl">LOOK AT ME</a>
         </div>
 
         <!-- Desktop Menu -->
         <div class="hidden md:flex space-x-6 text-white font-medium">
           <a href="../index.html" class="hover:text-yellow-300 transition font-bold text-2xl">Home</a>
-          <a href="/html/Product.html" class="hover:text-yellow-300 transition font-bold text-2xl">Product</a>
-          <a href="/html/Detail.html" class="hover:text-yellow-300 transition font-bold text-2xl">Detail</a>
-          <a href="/html/Cart.html" class="hover:text-yellow-300 transition font-bold text-2xl">Cart</a>
-          <a href="/html/Checkout.html" class="hover:text-yellow-300 transition font-bold text-2xl">Checkout</a>
+          <a href="./Product.html" class="hover:text-yellow-300 transition font-bold text-2xl">Product</a>
+          <a href="./Detail.html" class="hover:text-yellow-300 transition font-bold text-2xl">Detail</a>
+          <a href="./Cart.html" class="hover:text-yellow-300 transition font-bold text-2xl">Cart</a>
+          <a href="./Checkout.html" class="hover:text-yellow-300 transition font-bold text-2xl">Checkout</a>
+          <a href="./Abuot.html" class="block hover:text-yellow-300 transition font-bold text-2xl">Abuot</a>
         </div>
 
         <!-- Desktop Button -->
         <div class="hidden md:block">
-          <a href="/html/Login.html" class="bg-white text-indigo-700 px-4 py-2 rounded-xl hover:bg-yellow-300 transition-all font-semibold font-bold text-2xl">
+          <a href="./Login.html" class="bg-white text-indigo-700 px-4 py-2 rounded-xl hover:bg-yellow-300 transition-all font-semibold font-bold text-2xl">
             Log in
           </a>
         </div>
@@ -43,11 +44,12 @@
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-white font-medium">
       <a href="../index.html" class="block hover:text-yellow-300 transition font-bold text-2xl">Home</a>
-      <a href="/html/Product.html" class="block hover:text-yellow-300 transition font-bold text-2xl">Product</a>
-      <a href="/html/Detail.html" class="block hover:text-yellow-300 transition font-bold text-2xl">Detail</a>
-      <a href="/html/Cart.html" class="hover:text-yellow-300 transition font-bold text-2xl">Cart</a>
-      <a href="/html/Checkout.html" class="block hover:text-yellow-300 transition font-bold text-2xl">Checkout</a>
-      <a href="/html/Login.html" class="block bg-white text-indigo-700 text-center px-4 py-2 rounded-xl hover:bg-yellow-300 transition-all font-semibold mt-2 font-bold text-2xl">
+      <a href="../html/Product.html" class="block hover:text-yellow-300 transition font-bold text-2xl">Product</a>
+      <a href="../html/Detail.html" class="block hover:text-yellow-300 transition font-bold text-2xl">Detail</a>
+      <a href="../html/Cart.html" class="hover:text-yellow-300 transition font-bold text-2xl">Cart</a>
+      <a href="../html/Checkout.html" class="block hover:text-yellow-300 transition font-bold text-2xl">Checkout</a>
+      <a href="../html/Abuot.html" class="block hover:text-yellow-300 transition font-bold text-2xl">Abuot</a>
+      <a href="./Login.html" class="block bg-white text-indigo-700 text-center px-4 py-2 rounded-xl hover:bg-yellow-300 transition-all font-semibold mt-2 font-bold text-2xl">
         Log in
       </a>
     </div>
@@ -69,7 +71,7 @@
     </form>
 </div>
     </nav>
-
+    
     <script>
     const toggle = document.getElementById('menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -79,8 +81,7 @@
     });
     </script>
     
-
-    <footer class="absolute-right bottom-0 w-full text-white py-8 bg-gradient-to-t from-green-600 to-indigo-6000">
+    <footer class="absolute-right bottom-0 w-full text-white py-8 bg-gradient-to-t from-green-600 to-indigo-600">
 
     <div class="container mx-auto flex flex-wrap justify-between">
         <!-- Colonne 1 -->

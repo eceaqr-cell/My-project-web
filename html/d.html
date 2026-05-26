@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Look At Me - Shopping Cart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+    /* ── 1. កំណត់ CSS Variables សម្រាប់ប្តូរពណ៌តាម Mode ── */
+    :root {
+      --body-bg: #c6ab8f;
+      --cart-bg: #eeeeee;
+      --item-bg: #ffffff;
+      --text-main: #1a1a1a;
+      --text-muted: #6b7280;
+      --input-bg: #ffffff;
+      --nav-gradient: linear-gradient(to right, #4f46e5, #9333ea, #ec4899);
+    }
+
+    /* ពណ៌សម្រាប់ Dark Mode */
+    .dark {
+      --body-bg: #0f172a;
+      --cart-bg: #1e293b;
+      --item-bg: #334155;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --input-bg: #0f172a;
+      --nav-gradient: linear-gradient(to right, #1e1b4b, #312e81, #4c1d95);
+    }
+
+    *, *::before, *::after { transition: background-color .3s, color .3s, border-color .3s; }
+
+    body { margin: 0; font-family: Arial, sans-serif; background: var(--body-bg); color: var(--text-main); }
+
+    .container { display: flex; justify-content: center; padding: 40px; }
+
+    .cart { width: 100%; max-width: 800px; background: var(--cart-bg); border-radius: 20px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .header h2 { font-size: 1.5rem; font-weight: bold; }
+    .header input { padding: 10px 15px; border-radius: 10px; border: 1px solid #ddd; background: var(--input-bg); color: var(--text-main); outline: none; }
+
+    .table-header { display: grid; grid-template-columns: 3fr 1fr 1fr 1fr; margin-bottom: 15px; font-weight: bold; color: var(--text-muted); padding: 0 15px; }
+
+    .item { display: grid; grid-template-columns: 3fr 1fr 1fr 1fr auto; align-items: center; background: var(--item-bg); padding: 15px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+
+    .product { display: flex; align-items: center; gap: 15px; }
+    .product h4 { font-weight: 600; }
+    .img-box { width: 60px; height: 60px; background: #ddd; border-radius: 10px; overflow: hidden; }
+    .img-box img { width: 100%; height: 100%; object-fit: contain; }
+
+    .qty-box { display: flex; align-items: center; gap: 10px; }
+    .qty-box button { width: 28px; height: 28px; border: none; background: #f59e0b; color: white; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .qty-box button:hover { background: #d97706; }
+
+    .delete { background: #ef4444; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; margin-left: 10px; transition: transform 0.2s; }
+    .delete:hover { transform: scale(1.1); }
+
+    .footer { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.1); }
+    .dark .footer { border-top-color: rgba(255,255,255,0.1); }
+
+    .order { background: #2d9cdb; color: white; padding: 12px 25px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+    .order:hover { background: #2583b6; }
+
+    .total { font-size: 20px; font-weight: bold; }
+
+    #main-nav { background: var(--nav-gradient); }
+    </style>
+</head>
+<body>
+    <!-- Nav -->
+    <nav id="main-nav" class="shadow-lg transition-all duration-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex-shrink-0 text-white text-4xl font-bold">
+          <a href="#" class="hover:text-yellow-300 transition text-2xl">LOOK AT ME</a>
+        </div>
+
+        <div class="hidden md:flex space-x-6 text-white font-medium">
+          <a href="../a.html" class="hover:text-yellow-300 transition text-xl">Home</a>
+          <a href="b.html" class="hover:text-yellow-300 transition text-xl">Product</a>
+          <a href="c.html" class="hover:text-yellow-300 transition text-xl">Detail</a>
+          <a href="d.html" class="hover:text-yellow-300 transition text-xl">Cart</a>
+          <a href="e.html" class="hover:text-yellow-300 transition text-xl">Check Out</a>
+          <a href="f.html" class="hover:text-yellow-300 transition text-xl">About Us</a>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-4">
+          <button id="dark-mode-toggle" class="p-2 rounded-full bg-white/20 hover:bg-white/40 text-white transition">
+            <span id="theme-icon">🌙</span>
+          </button>
+          <a href="Login.html" class="bg-white text-indigo-700 px-4 py-2 rounded-xl hover:bg-yellow-300 transition-all font-bold text-xl">Log in</a>
+        </div>
+
+        <div class="md:hidden flex items-center gap-4">
+          <button id="dark-mode-toggle-mobile" class="text-white text-xl">🌙</button>
+          <button id="menu-toggle" class="text-white focus:outline-none text-3xl">☰</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2 text-white border-t border-white/20">
+      <a href="../a.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Home</a>
+      <a href="b.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Product</a>
+      <a href="c.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Detail</a>
+      <a href="d.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Cart</a>
+      <a href="e.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Check Out</a>
+      <a href="f.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">About Us</a>
+      <a href="Login.html" class="block bg-white text-indigo-700 text-center px-4 py-2 rounded-xl mt-4 font-bold text-xl">Log in</a>
+    </div>
+  </nav>
+
+    <main>
+      <div class="container">
+        <div class="cart">
+          <div class="header">
+            <h2>Shopping Cart</h2>
+            <input type="text" placeholder="Search Product...">
+          </div>
+
+          <div class="table-header">
+            <span>Product</span>
+            <span>Quantity</span>
+            <span>Price</span>
+            <span>Total</span>
+          </div>
+
+          <div class="cart-body" id="cart-body">
+            <!-- Item 1-->
+            <div class="item">
+              <div class="product">
+                <div class="img-box"><img src="../Img/1.png" alt=""></div>
+                <h4>Urban Wave</h4>
+              </div>
+              <div class="qty-box">
+                <button class="minus">-</button>
+                <span class="qty">2</span>
+                <button class="plus">+</button>
+              </div>
+              <div class="price">$50.00</div>
+              <div class="amount">$100.00</div>
+              <button class="delete">✖</button>
+            </div>
+
+            <!-- Item 2-->
+            <div class="item">
+              <div class="product">
+                <div class="img-box"><img src="../Img/2.png" alt=""></div>
+                <h4>Nova Style</h4>
+              </div>
+              <div class="qty-box">
+                <button class="minus">-</button>
+                <span class="qty">2</span>
+                <button class="plus">+</button>
+              </div>
+              <div class="price">$40.00</div>
+              <div class="amount">$80.00</div>
+              <button class="delete">✖</button>
+            </div>
+          </div>
+
+          <div class="footer">
+            <div class="total">Total Payable: $<span id="total">0</span></div>
+            <button class="order">Order Now →</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+  <footer class="w-full bg-gradient-to-b from-yellow-50 to-amber-400 pt-16 pb-6 px-8 md:px-16 font-sans text-gray-900 transition-all duration-500 
+               dark:from-slate-900 dark:to-slate-950 dark:text-slate-100">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
+        
+        <!-- Explore Section -->
+        <div>
+          <h3 class="text-3xl font-bold mb-4 tracking-tight dark:text-white">Explore</h3>
+          <ul class="space-y-2 text-base font-medium">
+            <li><a href="../a.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Home</a></li>
+            <li><a href="b.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Product</a></li>
+            <li><a href="c.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Detail</a></li>
+            <li><a href="d.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Cart</a></li>
+            <li><a href="e.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Check out</a></li>
+            <li><a href="f.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">About Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Address Section -->
+        <div>
+          <h3 class="text-xl font-black uppercase mb-4 tracking-wider dark:text-white">ADDRESS</h3>
+          <p class="text-base leading-relaxed font-medium opacity-80">
+            No. 41, Street 271, Sangkat<br>
+            Boeung Kak I, Khan Toul Kork,<br>
+            Phnom Penh, Cambodia
+          </p>
+        </div>
+
+        <!-- Contact Section -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 dark:text-white">Contact</h3>
+          <p class="text-base space-y-1 font-medium opacity-80">
+            <span class="block">eceaqr@gmail.com</span>
+            <span class="block">Phone: 012777771</span>
+          </p>
+        </div>
+
+        <!-- Newsletter Section -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 dark:text-white">Newsletter</h3>
+          <div class="flex max-w-sm rounded-lg overflow-hidden shadow-sm border dark:border-slate-700">
+            <input 
+              type="email" 
+              placeholder="Your email" 
+              class="w-full px-4 py-2 text-gray-700 bg-white placeholder-gray-400 focus:outline-none dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
+            >
+            <button class="bg-amber-400 hover:bg-amber-500 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:text-white font-semibold px-6 py-2 transition-colors border-l border-amber-300 dark:border-indigo-500">
+              Send
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Copyright Section -->
+      <div class="border-t border-amber-500/20 dark:border-slate-800 pt-6 text-center text-sm font-medium tracking-wide opacity-60">
+        &copy;2026 Urban Style Cambodia. Designed with 💖 .
+      </div>
+
+    </div>
+</footer>
+
+    <script>
+      // 1. Dark Mode Toggle Logic
+      const themeBtns = [document.getElementById('dark-mode-toggle'), document.getElementById('dark-mode-toggle-mobile')];
+      const htmlEl = document.documentElement;
+
+      function updateTheme(isDark) {
+        if (isDark) {
+          htmlEl.classList.add('dark');
+          document.querySelectorAll('#theme-icon, #dark-mode-toggle-mobile').forEach(i => i.textContent = '☀️');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          htmlEl.classList.remove('dark');
+          document.querySelectorAll('#theme-icon, #dark-mode-toggle-mobile').forEach(i => i.textContent = '🌙');
+          localStorage.setItem('theme', 'light');
+        }
+      }
+
+      if (localStorage.getItem('theme') === 'dark') updateTheme(true);
+      themeBtns.forEach(btn => btn.addEventListener('click', () => updateTheme(!htmlEl.classList.contains('dark'))));
+
+      // 2. Mobile Menu
+      document.getElementById('menu-toggle').addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+
+      // 3. Cart Logic
+      function updateCart() {
+        let total = 0;
+        document.querySelectorAll(".item").forEach(item => {
+          let price = parseFloat(item.querySelector(".price").textContent.replace("$",""));
+          let qty = parseInt(item.querySelector(".qty").textContent);
+          let amount = price * qty;
+          item.querySelector(".amount").textContent = "$" + amount.toFixed(2);
+          total += amount;
+        });
+        document.getElementById("total").textContent = total.toFixed(2);
+      }
+
+      document.addEventListener("click", function(e) {
+        if (e.target.classList.contains("plus")) {
+          let qtyEl = e.target.parentElement.querySelector(".qty");
+          qtyEl.textContent = parseInt(qtyEl.textContent) + 1;
+        }
+        if (e.target.classList.contains("minus")) {
+          let qtyEl = e.target.parentElement.querySelector(".qty");
+          let qty = parseInt(qtyEl.textContent);
+          if (qty > 1) qtyEl.textContent = qty - 1;
+        }
+        if (e.target.classList.contains("delete")) e.target.parentElement.remove();
+        updateCart();
+      });
+
+      updateCart();
+    </script>
+</body>
+</html>

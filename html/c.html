@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Look At Me - Product Detail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+    /* ── 1. បង្កើត CSS Variables សម្រាប់ប្តូរពណ៌ ── */
+    :root {
+      --body-bg: #f7f8f5;
+      --card-bg: #ffffff;
+      --text-main: #1a1a1a;
+      --text-muted: #6b7280;
+      --border-color: #f0f0f0;
+      --nav-gradient: linear-gradient(to right, #4f46e5, #9333ea, #ec4899);
+    }
+
+    /* ពណ៌នៅពេលស្ថិតក្នុង Dark Mode */
+    .dark {
+      --body-bg: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --nav-gradient: linear-gradient(to right, #1e1b4b, #312e81, #4c1d95);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; transition: background-color .3s, color .3s, border-color .3s; }
+    body { font-family: 'Segoe UI', sans-serif; color: var(--text-main); background: var(--body-bg); }
+    
+    /* ── SEARCH HERO ── */
+    .search-hero { background: linear-gradient(180deg, #3b82f6 0%, #93c5fd 60%, #dbeafe 100%); padding: 36px 16px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+    .search-hero h1 { color: #fff; font-size: 2.6rem; font-weight: 800; }
+
+    /* ── PRODUCT LAYOUT ── */
+    .product-section { max-width: 1260px; margin: 10px auto; padding: 20px 16px; }
+    .product-card { background: var(--card-bg); border-radius: 16px; display: flex; align-items: center; gap: 0; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+    .thumb-col { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 28px 16px; border-right: 1px solid var(--border-color); flex-shrink: 0; }
+    .thumb-col img { width: 72px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid transparent; }
+    .thumb-col img.active { border-color: #4f46e5; }
+
+    .main-img-wrap { padding: 28px 16px; display: flex; align-items: center; justify-content: center; flex: 1; }
+    .main-img-wrap img { width: 350px; height: auto; object-fit: contain; border-radius: 12px; }
+
+    .product-info { padding: 28px 28px; flex: 1; min-width: 0; }
+    .product-info h1 { font-size: 1.8rem; font-weight: 700; color: var(--text-main); }
+    .review-meta { color: var(--text-muted); }
+    .old-price { color: var(--text-muted); text-decoration: line-through; }
+    .divider { border: none; border-top: 1px solid var(--border-color); margin: 16px 0; }
+    .desc { color: var(--text-muted); line-height: 1.75; }
+
+    /* Qty Control */
+    .qty-ctrl { display: flex; align-items: center; gap: 6px; border: 1.5px solid var(--border-color); border-radius: 999px; padding: 6px 14px; background: var(--card-bg); color: var(--text-main); }
+    .qty-input { width: 36px; text-align: center; border: none; background: transparent; color: var(--text-main); outline: none; }
+    .qty-btn { color: var(--text-main); }
+
+    /* Size Buttons */
+    .size-btn { width:45px; height:45px; border:1px solid var(--border-color); border-radius:8px; background:var(--card-bg); color: var(--text-main); cursor:pointer; font-weight:bold; }
+
+    #main-nav { background: var(--nav-gradient); }
+
+    @media (max-width: 1024px) {
+      .product-card { flex-direction: column; }
+      .thumb-col { flex-direction: row; border-right: none; border-bottom: 1px solid var(--border-color); }
+    }
+    </style>
+</head>
+<body class="selection:bg-rose-100 selection:text-rose-600">
+
+    <!-- Nav -->
+    <nav id="main-nav" class="shadow-lg transition-all duration-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex-shrink-0 text-white text-4xl font-bold">
+          <a href="#" class="hover:text-yellow-300 transition text-2xl">LOOK AT ME</a>
+        </div>
+
+        <div class="hidden md:flex space-x-6 text-white font-medium">
+          <a href="../a.html" class="hover:text-yellow-300 transition text-xl">Home</a>
+          <a href="b.html" class="hover:text-yellow-300 transition text-xl">Product</a>
+          <a href="c.html" class="hover:text-yellow-300 transition text-xl">Detail</a>
+          <a href="d.html" class="hover:text-yellow-300 transition text-xl">Cart</a>
+          <a href="e.html" class="hover:text-yellow-300 transition text-xl">Check Out</a>
+          <a href="f.html" class="hover:text-yellow-300 transition text-xl">About Us</a>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-4">
+          <button id="dark-mode-toggle" class="p-2 rounded-full bg-white/20 hover:bg-white/40 text-white transition">
+            <span id="theme-icon">🌙</span>
+          </button>
+          <a href="Login.html" class="bg-white text-indigo-700 px-4 py-2 rounded-xl hover:bg-yellow-300 transition-all font-bold text-xl">Log in</a>
+        </div>
+
+        <div class="md:hidden flex items-center gap-4">
+          <button id="dark-mode-toggle-mobile" class="text-white text-xl">🌙</button>
+          <button id="menu-toggle" class="text-white focus:outline-none text-3xl">☰</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2 text-white border-t border-white/20">
+      <a href="../a.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Home</a>
+      <a href="b.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Product</a>
+      <a href="c.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Detail</a>
+      <a href="d.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Cart</a>
+      <a href="e.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Check Out</a>
+      <a href="f.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">About Us</a>
+      <a href="Login.html" class="block bg-white text-indigo-700 text-center px-4 py-2 rounded-xl mt-4 font-bold text-xl">Log in</a>
+    </div>
+  </nav>
+
+    <main class="product-section">
+      <!-- 1 -->
+      <div class="product-card style="margin-bottom:50px;">
+        <!-- sfddfg -->
+        <div class="thumb-col">
+          <img class="active" src="../Img/2.png" alt="View 1" onclick="changeMainImg('../Img/8.png', this)">
+          <img src="../Img/D.png" alt="View 2" onclick="changeMainImg('../Img/A.png', this)">
+          <img src="../Img/F.png" alt="View 3" onclick="changeMainImg('../Img/SD.png', this)">
+          <img src="../Img/E.png" alt="View 4" onclick="changeMainImg('../Img/DS.png', this)">
+        </div>
+
+        <!-- Main image -->
+        <div class="main-img-wrap">
+          <img id="mainImg" src="../Img/2.png" alt="Main View">
+        </div>
+
+        <!-- Info panel -->
+        <div class="product-info">
+          <div class="flex justify-between items-start mb-2">
+            <h1>Set Of Clothes (Premium)</h1>
+            <span class="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold px-3 py-1 rounded-full">In Stock</span>
+          </div>
+
+          <div class="stars flex mb-2 text-yellow-400">★★★★★ <span class="review-meta ml-3">(4 Reviews)</span></div>
+
+          <div class="price-row flex items-baseline gap-4 mb-4">
+            <span class="new-price text-3xl font-bold text-green-600 dark:text-green-400">$18.00</span>
+            <span class="old-price">$50.00</span>
+          </div>
+
+          <hr class="divider">
+
+          <div class="mb-6">
+            <h3 class="font-bold mb-3">Size:</h3>
+            <div class="flex gap-2">
+              <button class="size-btn" onclick="selectSize(this)">S</button>
+              <button class="size-btn" onclick="selectSize(this)">M</button>
+              <button class="size-btn" onclick="selectSize(this)">L</button>
+              <button class="size-btn" onclick="selectSize(this)">XL</button>
+            </div>
+          </div>
+
+          <p class="desc mb-6">Unleash your inner spirit with our Premium Wolf Galaxy Hoodie & Joggers set. Featuring a high-definition 3D print of a majestic wolf surrounded by vibrant blue flames.</p>
+
+          <div class="flex items-center gap-4">
+            <div class="qty-ctrl">
+              <button onclick="changeQty(-1)" class="qty-btn px-2">-</button>
+              <input id="qty" type="text" value="1" readonly class="qty-input">
+              <button onclick="changeQty(1)" class="qty-btn px-2">+</button>
+            </div>
+            <button class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-full transition">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+            <!-- 2 -->
+      <div class="product-card style="margin-bottom:50px;">
+        <!-- 1 -->
+        <div class="thumb-col">
+          <img class="active" src="../Img/8.png" alt="View 1" onclick="changeMainImg('../Img/8.png', this)">
+          <img src="../Img/A.png" alt="View 2" onclick="changeMainImg('../Img/A.png', this)">
+          <img src="../Img/SD.png" alt="View 3" onclick="changeMainImg('../Img/SD.png', this)">
+          <img src="../Img/DS.png" alt="View 4" onclick="changeMainImg('../Img/DS.png', this)">
+        </div>
+
+        <!-- Main image -->
+        <div class="main-img-wrap">
+          <img id="mainImg" src="../Img/8.png" alt="Main View">
+        </div>
+
+        <!-- Info panel -->
+        <div class="product-info">
+          <div class="flex justify-between items-start mb-2">
+            <h1>Set Of Clothes (Premium)</h1>
+            <span class="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold px-3 py-1 rounded-full">In Stock</span>
+          </div>
+
+          <div class="stars flex mb-2 text-yellow-400">★★★★★ <span class="review-meta ml-3">(4 Reviews)</span></div>
+
+          <div class="price-row flex items-baseline gap-4 mb-4">
+            <span class="new-price text-3xl font-bold text-green-600 dark:text-green-400">$18.00</span>
+            <span class="old-price">$50.00</span>
+          </div>
+
+          <hr class="divider">
+
+          <div class="mb-6">
+            <h3 class="font-bold mb-3">Size:</h3>
+            <div class="flex gap-2">
+              <button class="size-btn" onclick="selectSize(this)">S</button>
+              <button class="size-btn" onclick="selectSize(this)">M</button>
+              <button class="size-btn" onclick="selectSize(this)">L</button>
+              <button class="size-btn" onclick="selectSize(this)">XL</button>
+            </div>
+          </div>
+
+          <p class="desc mb-6">Unleash your inner spirit with our Premium Wolf Galaxy Hoodie & Joggers set. Featuring a high-definition 3D print of a majestic wolf surrounded by vibrant blue flames.</p>
+
+          <div class="flex items-center gap-4">
+            <div class="qty-ctrl">
+              <button onclick="changeQty(-1)" class="qty-btn px-2">-</button>
+              <input id="qty" type="text" value="1" readonly class="qty-input">
+              <button onclick="changeQty(1)" class="qty-btn px-2">+</button>
+            </div>
+            <button class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-full transition">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+            <!-- 3 -->
+      <div class="product-card style="margin-bottom:50px;">
+        <!-- sfddfg -->
+        <div class="thumb-col">
+          <img class="active" src="../Img/3.png" alt="View 1" onclick="changeMainImg('../Img/8.png', this)">
+          <img src="../Img/G.png" alt="View 2" onclick="changeMainImg('../Img/A.png', this)">
+          <img src="../Img/I.png" alt="View 3" onclick="changeMainImg('../Img/SD.png', this)">
+          <img src="../Img/RE.png" alt="View 4" onclick="changeMainImg('../Img/DS.png', this)">
+        </div>
+
+        <!-- Main image -->
+        <div class="main-img-wrap">
+          <img id="mainImg" src="../Img/3.png" alt="Main View">
+        </div>
+
+        <!-- Info panel -->
+        <div class="product-info">
+          <div class="flex justify-between items-start mb-2">
+            <h1>Set Of Clothes (Premium)</h1>
+            <span class="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold px-3 py-1 rounded-full">In Stock</span>
+          </div>
+
+          <div class="stars flex mb-2 text-yellow-400">★★★★★ <span class="review-meta ml-3">(4 Reviews)</span></div>
+
+          <div class="price-row flex items-baseline gap-4 mb-4">
+            <span class="new-price text-3xl font-bold text-green-600 dark:text-green-400">$18.00</span>
+            <span class="old-price">$50.00</span>
+          </div>
+
+          <hr class="divider">
+
+          <div class="mb-6">
+            <h3 class="font-bold mb-3">Size:</h3>
+            <div class="flex gap-2">
+              <button class="size-btn" onclick="selectSize(this)">S</button>
+              <button class="size-btn" onclick="selectSize(this)">M</button>
+              <button class="size-btn" onclick="selectSize(this)">L</button>
+              <button class="size-btn" onclick="selectSize(this)">XL</button>
+            </div>
+          </div>
+
+          <p class="desc mb-6">Unleash your inner spirit with our Premium Wolf Galaxy Hoodie & Joggers set. Featuring a high-definition 3D print of a majestic wolf surrounded by vibrant blue flames.</p>
+
+          <div class="flex items-center gap-4">
+            <div class="qty-ctrl">
+              <button onclick="changeQty(-1)" class="qty-btn px-2">-</button>
+              <input id="qty" type="text" value="1" readonly class="qty-input">
+              <button onclick="changeQty(1)" class="qty-btn px-2">+</button>
+            </div>
+            <button class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-full transition">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+            <!-- 4 -->
+      <div class="product-card style="margin-bottom:50px;">
+        <!-- 1 -->
+        <div class="thumb-col">
+          <img class="active" src="../Img/4.png" alt="View 1" onclick="changeMainImg('../Img/8.png', this)">
+          <img src="../Img/J.png" alt="View 2" onclick="changeMainImg('../Img/A.png', this)">
+          <img src="../Img/L.png" alt="View 3" onclick="changeMainImg('../Img/SD.png', this)">
+          <img src="../Img/K.png" alt="View 4" onclick="changeMainImg('../Img/DS.png', this)">
+        </div>
+
+        <!-- Main image -->
+        <div class="main-img-wrap">
+          <img id="mainImg" src="../Img/4.png" alt="Main View">
+        </div>
+
+        <!-- Info panel -->
+        <div class="product-info">
+          <div class="flex justify-between items-start mb-2">
+            <h1>Set Of Clothes (Premium)</h1>
+            <span class="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold px-3 py-1 rounded-full">In Stock</span>
+          </div>
+
+          <div class="stars flex mb-2 text-yellow-400">★★★★★ <span class="review-meta ml-3">(4 Reviews)</span></div>
+
+          <div class="price-row flex items-baseline gap-4 mb-4">
+            <span class="new-price text-3xl font-bold text-green-600 dark:text-green-400">$18.00</span>
+            <span class="old-price">$50.00</span>
+          </div>
+
+          <hr class="divider">
+
+          <div class="mb-6">
+            <h3 class="font-bold mb-3">Size:</h3>
+            <div class="flex gap-2">
+              <button class="size-btn" onclick="selectSize(this)">S</button>
+              <button class="size-btn" onclick="selectSize(this)">M</button>
+              <button class="size-btn" onclick="selectSize(this)">L</button>
+              <button class="size-btn" onclick="selectSize(this)">XL</button>
+            </div>
+          </div>
+
+          <p class="desc mb-6">Unleash your inner spirit with our Premium Wolf Galaxy Hoodie & Joggers set. Featuring a high-definition 3D print of a majestic wolf surrounded by vibrant blue flames.</p>
+
+          <div class="flex items-center gap-4">
+            <div class="qty-ctrl">
+              <button onclick="changeQty(-1)" class="qty-btn px-2">-</button>
+              <input id="qty" type="text" value="1" readonly class="qty-input">
+              <button onclick="changeQty(1)" class="qty-btn px-2">+</button>
+            </div>
+            <button class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-full transition">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+            <!-- 5 -->
+      <div class="product-card style="margin-bottom:50px;">
+        <!-- sfddfg -->
+        <div class="thumb-col">
+          <img class="active" src="../Img/5.png" alt="View 1" onclick="changeMainImg('../Img/8.png', this)">
+          <img src="../Img/N.png" alt="View 2" onclick="changeMainImg('../Img/A.png', this)">
+          <img src="../Img/O.png" alt="View 3" onclick="changeMainImg('../Img/SD.png', this)">
+          <img src="../Img/M.png" alt="View 4" onclick="changeMainImg('../Img/DS.png', this)">
+        </div>
+
+        <!-- Main image -->
+        <div class="main-img-wrap">
+          <img id="mainImg" src="../Img/5.png" alt="Main View">
+        </div>
+
+        <!-- Info panel -->
+        <div class="product-info">
+          <div class="flex justify-between items-start mb-2">
+            <h1>Set Of Clothes (Premium)</h1>
+            <span class="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold px-3 py-1 rounded-full">In Stock</span>
+          </div>
+
+          <div class="stars flex mb-2 text-yellow-400">★★★★★ <span class="review-meta ml-3">(4 Reviews)</span></div>
+
+          <div class="price-row flex items-baseline gap-4 mb-4">
+            <span class="new-price text-3xl font-bold text-green-600 dark:text-green-400">$18.00</span>
+            <span class="old-price">$50.00</span>
+          </div>
+
+          <hr class="divider">
+
+          <div class="mb-6">
+            <h3 class="font-bold mb-3">Size:</h3>
+            <div class="flex gap-2">
+              <button class="size-btn" onclick="selectSize(this)">S</button>
+              <button class="size-btn" onclick="selectSize(this)">M</button>
+              <button class="size-btn" onclick="selectSize(this)">L</button>
+              <button class="size-btn" onclick="selectSize(this)">XL</button>
+            </div>
+          </div>
+
+          <p class="desc mb-6">Unleash your inner spirit with our Premium Wolf Galaxy Hoodie & Joggers set. Featuring a high-definition 3D print of a majestic wolf surrounded by vibrant blue flames.</p>
+
+          <div class="flex items-center gap-4">
+            <div class="qty-ctrl">
+              <button onclick="changeQty(-1)" class="qty-btn px-2">-</button>
+              <input id="qty" type="text" value="1" readonly class="qty-input">
+              <button onclick="changeQty(1)" class="qty-btn px-2">+</button>
+            </div>
+            <button class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-full transition">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+            <!-- 6 -->
+      <div class="product-card style="margin-bottom:50px;">
+        <!-- 1 -->
+        <div class="thumb-col">
+          <img class="active" src="../Img/6.png" alt="View 1" onclick="changeMainImg('../Img/8.png', this)">
+          <img src="../Img/IU.png" alt="View 2" onclick="changeMainImg('../Img/A.png', this)">
+          <img src="../Img/UI.png" alt="View 3" onclick="changeMainImg('../Img/SD.png', this)">
+          <img src="../Img/PP.png" alt="View 4" onclick="changeMainImg('../Img/DS.png', this)">
+        </div>
+
+        <!-- Main image -->
+        <div class="main-img-wrap">
+          <img id="mainImg" src="../Img/6.png" alt="Main View">
+        </div>
+
+        <!-- Info panel -->
+        <div class="product-info">
+          <div class="flex justify-between items-start mb-2">
+            <h1>Set Of Clothes (Premium)</h1>
+            <span class="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold px-3 py-1 rounded-full">In Stock</span>
+          </div>
+
+          <div class="stars flex mb-2 text-yellow-400">★★★★★ <span class="review-meta ml-3">(4 Reviews)</span></div>
+
+          <div class="price-row flex items-baseline gap-4 mb-4">
+            <span class="new-price text-3xl font-bold text-green-600 dark:text-green-400">$18.00</span>
+            <span class="old-price">$50.00</span>
+          </div>
+
+          <hr class="divider">
+
+          <div class="mb-6">
+            <h3 class="font-bold mb-3">Size:</h3>
+            <div class="flex gap-2">
+              <button class="size-btn" onclick="selectSize(this)">S</button>
+              <button class="size-btn" onclick="selectSize(this)">M</button>
+              <button class="size-btn" onclick="selectSize(this)">L</button>
+              <button class="size-btn" onclick="selectSize(this)">XL</button>
+            </div>
+          </div>
+
+          <p class="desc mb-6">Unleash your inner spirit with our Premium Wolf Galaxy Hoodie & Joggers set. Featuring a high-definition 3D print of a majestic wolf surrounded by vibrant blue flames.</p>
+
+          <div class="flex items-center gap-4">
+            <div class="qty-ctrl">
+              <button onclick="changeQty(-1)" class="qty-btn px-2">-</button>
+              <input id="qty" type="text" value="1" readonly class="qty-input">
+              <button onclick="changeQty(1)" class="qty-btn px-2">+</button>
+            </div>
+            <button class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-full transition">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+  <footer class="w-full bg-gradient-to-b from-yellow-50 to-amber-400 pt-16 pb-6 px-8 md:px-16 font-sans text-gray-900 transition-all duration-500 
+               dark:from-slate-900 dark:to-slate-950 dark:text-slate-100">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
+        
+        <!-- Explore Section -->
+        <div>
+          <h3 class="text-3xl font-bold mb-4 tracking-tight dark:text-white">Explore</h3>
+          <ul class="space-y-2 text-base font-medium">
+            <li><a href="../a.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Home</a></li>
+            <li><a href="b.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Product</a></li>
+            <li><a href="c.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Detail</a></li>
+            <li><a href="d.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Cart</a></li>
+            <li><a href="e.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Check out</a></li>
+            <li><a href="f.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">About Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Address Section -->
+        <div>
+          <h3 class="text-xl font-black uppercase mb-4 tracking-wider dark:text-white">ADDRESS</h3>
+          <p class="text-base leading-relaxed font-medium opacity-80">
+            No. 41, Street 271, Sangkat<br>
+            Boeung Kak I, Khan Toul Kork,<br>
+            Phnom Penh, Cambodia
+          </p>
+        </div>
+
+        <!-- Contact Section -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 dark:text-white">Contact</h3>
+          <p class="text-base space-y-1 font-medium opacity-80">
+            <span class="block">eceaqr@gmail.com</span>
+            <span class="block">Phone: 012777771</span>
+          </p>
+        </div>
+
+        <!-- Newsletter Section -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 dark:text-white">Newsletter</h3>
+          <div class="flex max-w-sm rounded-lg overflow-hidden shadow-sm border dark:border-slate-700">
+            <input 
+              type="email" 
+              placeholder="Your email" 
+              class="w-full px-4 py-2 text-gray-700 bg-white placeholder-gray-400 focus:outline-none dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
+            >
+            <button class="bg-amber-400 hover:bg-amber-500 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:text-white font-semibold px-6 py-2 transition-colors border-l border-amber-300 dark:border-indigo-500">
+              Send
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Copyright Section -->
+      <div class="border-t border-amber-500/20 dark:border-slate-800 pt-6 text-center text-sm font-medium tracking-wide opacity-60">
+        &copy;2026 Urban Style Cambodia. Designed with 💖 .
+      </div>
+
+    </div>
+</footer>
+
+    <script>
+      // 1. Dark Mode Toggle Logic
+      const themeBtns = [document.getElementById('dark-mode-toggle'), document.getElementById('dark-mode-toggle-mobile')];
+      const htmlEl = document.documentElement;
+
+      function updateTheme(isDark) {
+        if (isDark) {
+          htmlEl.classList.add('dark');
+          document.querySelectorAll('#theme-icon, #dark-mode-toggle-mobile').forEach(i => i.textContent = '☀️');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          htmlEl.classList.remove('dark');
+          document.querySelectorAll('#theme-icon, #dark-mode-toggle-mobile').forEach(i => i.textContent = '🌙');
+          localStorage.setItem('theme', 'light');
+        }
+      }
+
+      if (localStorage.getItem('theme') === 'dark') updateTheme(true);
+
+      themeBtns.forEach(btn => {
+        btn.addEventListener('click', () => updateTheme(!htmlEl.classList.contains('dark')));
+      });
+
+      // 2. Mobile Menu
+      document.getElementById('menu-toggle').addEventListener('click', () => {
+        document.getElementById('mobile-menu').classList.toggle('hidden');
+      });
+
+      // 3. Product Page Logic
+      function changeMainImg(src, thumb) {
+        document.getElementById('mainImg').src = src;
+        document.querySelectorAll('.thumb-col img').forEach(img => img.classList.remove('active'));
+        thumb.classList.add('active');
+      }
+
+      function changeQty(amt) {
+        let q = document.getElementById('qty');
+        let val = parseInt(q.value) + amt;
+        if (val > 0) q.value = val;
+      }
+
+      function selectSize(btn) {
+        document.querySelectorAll('.size-btn').forEach(b => {
+          b.style.backgroundColor = 'var(--card-bg)';
+          b.style.color = 'var(--text-main)';
+        });
+        btn.style.backgroundColor = '#16a34a';
+        btn.style.color = 'white';
+      }
+    </script>
+</body>
+</html>

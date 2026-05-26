@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Look At Me - Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FIX 1: Ensure Tailwind is set to 'class' mode -->
+  <script>tailwind.config = { darkMode: 'class' }</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    *, *::before, *::after {
+      transition: background-color .25s, border-color .2s, color .15s, box-shadow .2s;
+    }
+
+    .nav-link {
+      background: linear-gradient(to right, #fbcfe8, #e879f9, #67e8f9);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 12px rgba(255,105,255,0.8));
+      font-weight: 700;
+      font-size: 1.5rem;
+      transition: transform .3s;
+      display: inline-block;
+    }
+    .nav-link:hover { transform: scale(1.1); }
+
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* FIX 2: Link your custom variables to the .dark class that Tailwind uses */
+    :root {
+      --bg-body: #ffffff;
+      --text-main: #1a1a1a;
+      --nav-gradient: linear-gradient(to right, #4f46e5, #9333ea, #ec4899);
+    }
+
+    /* Change [data-theme="dark"] to .dark to match Tailwind */
+    .dark {
+      --bg-body: #0f172a;
+      --text-main: #f1f5f9;
+      --nav-gradient: linear-gradient(to right, #1e1b4b, #312e81, #4c1d95);
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+    }
+
+    #main-nav {
+      background: var(--nav-gradient);
+    }
+  </style>
+  <script>
+  function swipeCards() {
+    return {
+      cards: [
+        { id:1, image:'./Img/1.png', title:'Urban Wave',   description:'', price:50,},
+        { id:2, image:'./Img/2.png', title:'Nova Style',    description:'', price:50,},
+        { id:3, image:'./Img/3.png',title:'Black Avenue',  description:'', price:50,},
+        { id:4, image:'./Img/4.png', title:'MoonWear',     description:'', price:50,},
+        { id:5, image:'./Img/5.png', title:'Street Mode',  description:'', price:50,},
+        { id:6, image:'./Img/6.png',                                title:'Velvet Fit',   description:'', price:50,},
+        { id:7, image:'./Img/7.png', title:'Neo Fashion',  description:'', price:50,}
+      ]
+    };
+  }
+</script>
+</head>
+<body>
+
+  <nav id="main-nav" class="shadow-lg transition-all duration-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex-shrink-0 text-white text-4xl font-bold">
+          <a href="#" class="hover:text-yellow-300 transition text-2xl">LOOK AT ME</a>
+        </div>
+
+        <div class="hidden md:flex space-x-6 text-white font-medium">
+          <a href="./a.html" class="hover:text-yellow-300 transition text-xl">Home</a>
+          <a href="./html/b.html" class="hover:text-yellow-300 transition text-xl">Product</a>
+          <a href="./html/c.html" class="hover:text-yellow-300 transition text-xl">Detail</a>
+          <a href="./html/d.html" class="hover:text-yellow-300 transition text-xl">Cart</a>
+          <a href="./html/e.html" class="hover:text-yellow-300 transition text-xl">Check Out</a>
+          <a href="./html/f.html" class="hover:text-yellow-300 transition text-xl">About Us</a>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-4">
+          <button id="dark-mode-toggle" class="p-2 rounded-full bg-white/20 hover:bg-white/40 text-white transition">
+            <span id="theme-icon">🌙</span>
+          </button>
+          <a href="./html/Login.html" class="bg-white text-indigo-700 px-4 py-2 rounded-xl hover:bg-yellow-300 transition-all font-bold text-xl">Log in</a>
+        </div>
+
+        <div class="md:hidden flex items-center gap-4">
+          <button id="dark-mode-toggle-mobile" class="text-white text-xl">🌙</button>
+          <button id="menu-toggle" class="text-white focus:outline-none text-3xl">☰</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2 text-white border-t border-white/20">
+      <a href="./a.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Home</a>
+      <a href="./html/b.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Product</a>
+      <a href="./html/c.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Detail</a>
+      <a href="./html/d.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Cart</a>
+      <a href="./html/e.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Check Out</a>
+      <a href="./html/f.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">About Us</a>
+      <a href="./html/Login.html" class="block bg-white text-indigo-700 text-center px-4 py-2 rounded-xl mt-4 font-bold text-xl">Log in</a>
+    </div>
+  </nav>
+
+  <main class="dark:bg-slate-900">
+      <!-- ── Image Slideshow ── -->
+  <div x-data="{
+    currentIndex: 0,
+    autoSlide: true,
+    interval: null,
+    images: [
+      { id:1, url:'./Img/1.png', title:'Urban Wave' },
+      { id:2, url:'./Img/2.png', title:'Nova Style' },
+      { id:3, url:'./Img/3.png', title:'Black Avenue' },
+      { id:4, url:'./Img/4.png', title:'MoonWear' },
+      { id:5, url:'./Img/5.png', title:'Street Mode' }
+    ],
+    init() {
+      if (this.autoSlide) this.startAutoSlide();
+    },
+    startAutoSlide() {
+      this.interval = setInterval(() => this.nextSlide(), 4000);
+    },
+    stopAutoSlide() {
+      if (this.interval) { clearInterval(this.interval); this.interval = null; }
+    },
+    nextSlide() { this.currentIndex = (this.currentIndex + 1) % this.images.length; },
+    prevSlide() { this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length; },
+    goToSlide(index) { this.currentIndex = index; },
+    toggleAutoSlide() {
+      this.autoSlide = !this.autoSlide;
+      this.autoSlide ? this.startAutoSlide() : this.stopAutoSlide();
+    }
+  }" class="w-full max-w-6xl mx-auto px-4 py-6 h-full">
+
+    <!-- Controls -->
+    <div class="flex justify-between items-center mb-6">
+      <div class="flex items-center space-x-4">
+        <button @click="toggleAutoSlide"
+          :class="autoSlide ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-700 hover:bg-gray-600'"
+          class="text-white px-4 py-2 rounded-lg transition-all duration-300">
+          <span x-text="autoSlide ? '❚❚ Pause' : '▶ Lecture'"></span>
+        </button>
+        <div class="text-white text-sm bg-gray-800 dark:bg-slate-700 px-3 py-1 rounded-full">
+          <span x-text="currentIndex + 1"></span> / <span x-text="images.length"></span>
+        </div>
+      </div>
+      <div class="flex space-x-2">
+        <button @click="prevSlide" @mouseenter="stopAutoSlide()" @mouseleave="if(autoSlide) startAutoSlide()"
+          class="bg-gray-800 hover:bg-gray-700 dark:bg-slate-700 dark:hover:bg-slate-600
+                 text-white p-3 rounded-full transition-all duration-300 hover:scale-110">←</button>
+        <button @click="nextSlide" @mouseenter="stopAutoSlide()" @mouseleave="if(autoSlide) startAutoSlide()"
+          class="bg-gray-800 hover:bg-gray-700 dark:bg-slate-700 dark:hover:bg-slate-600
+                 text-white p-3 rounded-full transition-all duration-300 hover:scale-110">→</button>
+      </div>
+    </div>
+
+    <!-- Main slide -->
+    <div class="mb-10">
+      <div class="bg-gradient-to-br from-gray-800 to-gray-900 dark:from-slate-800 dark:to-slate-950
+                  rounded-2xl overflow-hidden shadow-2xl border border-gray-700 dark:border-slate-700">
+        <div class="relative h-[500px] md:h-[600px] overflow-hidden">
+          <template x-for="(image, index) in images" :key="image.id">
+            <img x-transition:enter="transition ease-out duration-500"
+                 x-transition:enter-start="opacity-0 scale-105"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-300"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-95"
+                 x-show="currentIndex === index"
+                 :src="image.url" :alt="image.title"
+                 class="absolute inset-0 w-full h-full object-contain">
+          </template>
+          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 md:p-8">
+            <h2 x-text="images[currentIndex].title" class="text-2xl md:text-3xl font-bold text-white mb-2"></h2>
+          </div>
+          <div class="absolute top-4 right-4 flex space-x-2">
+            <template x-for="(_, index) in images" :key="index">
+              <button @click="goToSlide(index)"
+                :class="currentIndex === index ? 'bg-white w-8' : 'bg-white/50 w-3 hover:bg-white/80'"
+                class="h-3 rounded-full transition-all duration-300"></button>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thumbnail strip -->
+    <div class="flex overflow-x-auto scrollbar-hide pb-4 space-x-4">
+      <template x-for="(image, index) in images" :key="image.id">
+        <div @click="goToSlide(index)"
+          :class="currentIndex === index ? 'ring-2 ring-blue-500' : 'opacity-80 hover:opacity-100'"
+          class="flex-shrink-0 w-40 md:w-48 lg:w-56 cursor-pointer rounded-xl overflow-hidden
+                 bg-gray-800 dark:bg-slate-800 transition-all duration-300 transform hover:-translate-y-2"
+          @mouseenter="stopAutoSlide()" @mouseleave="if(autoSlide) startAutoSlide()">
+          <div class="relative h-32 md:h-40">
+            <img :src="image.url" :alt="image.title" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+            <div x-show="currentIndex === index"
+                 class="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+              <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="p-3">
+            <h4 x-text="image.title" class="font-medium text-white truncate"></h4>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <!-- Progress dots -->
+    <div class="flex justify-center mt-8 space-x-3">
+      <template x-for="(_, index) in images" :key="index">
+        <button @click="goToSlide(index)"
+          :class="currentIndex === index ? 'bg-blue-500 w-10' : 'bg-gray-700 dark:bg-slate-600 hover:bg-gray-600 w-3'"
+          class="h-3 rounded-full transition-all duration-300"></button>
+      </template>
+    </div>
+  </div>
+
+  <!-- ── Hero Promo Banner ── -->
+  <section class="relative bg-gradient-to-br from-purple-900 via-indigo-800 to-blue-900
+                  dark:from-slate-950 dark:via-indigo-950 dark:to-blue-950 text-white overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 left-0 w-full h-full
+                  bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+    </div>
+    <div class="container mx-auto px-6 py-24 relative z-10">
+      <div class="flex flex-col lg:flex-row items-center">
+        <div class="lg:w-1/2 mb-12 lg:mb-0">
+          <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+            <span class="bg-gradient-to-r from-pink-500 to-yellow-500 bg-clip-text text-transparent">
+              BUY 10 AND GET 1 FREE
+            </span>
+          </h1>
+          <p class="text-xl text-blue-100 dark:text-slate-300 mb-8 max-w-lg">
+            Customers who keep the clothing tags can buy 10 items and get 1 free.
+          </p>
+          <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <button class="bg-gradient-to-r from-pink-500 to-yellow-500 text-white px-8 py-4 rounded-xl
+                           font-bold hover:from-pink-600 hover:to-yellow-600 transition-all
+                           transform hover:scale-105 shadow-lg">Enough</button>
+            <button class="bg-white bg-opacity-20 text-white px-8 py-4 rounded-xl font-bold
+                           hover:bg-opacity-30 transition-all border border-white border-opacity-30">
+              Not Enough
+            </button>
+          </div>
+        </div>
+        <div class="lg:w-1/2 flex justify-center">
+          <div class="relative w-full max-w-md">
+            <div class="absolute -top-10 -left-10 w-32 h-32 bg-pink-500 rounded-full filter blur-3xl opacity-30"></div>
+            <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-500 rounded-full filter blur-3xl opacity-30"></div>
+            <img src="./Img/4.png" alt="Hero Image"
+                 class="relative z-10 w-full rounded-3xl">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 h-32
+                bg-gradient-to-t from-gray-50 dark:from-slate-900 to-transparent"></div>
+  </section>
+
+  <!-- ── Swipeable Product Cards ── -->
+  <div x-data="swipeCards()"
+       x-init="
+         let isDown = false, startX, scrollLeft;
+         $el.addEventListener('mousedown', e => { isDown=true; startX=e.pageX-$el.offsetLeft; scrollLeft=$el.scrollLeft; });
+         $el.addEventListener('mouseleave', () => isDown=false);
+         $el.addEventListener('mouseup', () => isDown=false);
+         $el.addEventListener('mousemove', e => {
+           if (!isDown) return; e.preventDefault();
+           const x = e.pageX-$el.offsetLeft;
+           $el.scrollLeft = scrollLeft - (x-startX);
+         });
+       "
+       class="overflow-x-scroll scrollbar-hide mb-4 relative px-0.5 dark:bg-slate-900"
+       style="overflow-y: hidden;">
+    <div class="flex snap-x snap-mandatory gap-4 p-4" style="width: max-content;">
+      <template x-for="card in cards" :key="card.id">
+        <div class="flex-none w-64 snap-center">
+          <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700
+                      rounded-lg overflow-hidden mb-4 shadow dark:shadow-slate-900">
+            <img :src="card.image" alt="" class="w-full h-40 object-contain bg-white dark:bg-slate-700">
+            <div class="p-4">
+              <h3 class="text-lg leading-6 font-bold text-gray-900 dark:text-white" x-text="card.title"></h3>
+              <p class="text-gray-600 dark:text-slate-400 mt-2 text-sm" x-text="card.description"></p>
+              <div class="flex justify-between items-center mt-4">
+                <span class="text-2xl font-extrabold text-gray-900 dark:text-white"
+                      x-text="'$' + card.price.toFixed(2)"></span>
+                <a :href="card.link"
+                   class="text-white bg-fuchsia-950 hover:bg-fuchsia-800 dark:bg-fuchsia-800
+                          dark:hover:bg-fuchsia-700 focus:ring-4 focus:outline-none focus:ring-blue-300
+                          font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                       stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75
+                         m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84
+                         M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z
+                         m12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- ── Testimonials ── -->
+  <section class="py-12 bg-gray-50 dark:bg-slate-800 sm:py-16 lg:py-20">
+    <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div class="flex flex-col items-center">
+        <div class="text-center">
+          <p class="text-lg font-medium text-gray-600 dark:text-slate-400">
+            2,157 people have said how good Rareblocks
+          </p>
+          <h2 class="mt-4 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl xl:text-5xl">
+            Our happy clients say about us
+          </h2>
+        </div>
+
+        <div class="mt-8 text-center md:mt-16 md:order-3">
+          <a href="#"
+             class="pb-2 text-base font-bold leading-7 text-gray-900 dark:text-white
+                    transition-all duration-200 border-b-2 border-gray-900 dark:border-white
+                    hover:border-gray-600 dark:hover:border-slate-400">
+            Check all 2,157 reviews
+          </a>
+        </div>
+
+        <div class="relative mt-10 md:mt-24 md:order-2">
+          <div class="absolute -inset-x-1 inset-y-16 md:-inset-x-2 md:-inset-y-6">
+            <div class="w-full h-full max-w-5xl mx-auto rounded-3xl opacity-30 blur-lg filter"
+                 style="background: linear-gradient(90deg, #44ff9a -0.55%, #44b0ff 22.86%, #8b44ff 48.36%, #ff6644 73.33%, #ebff70 99.34%)">
+            </div>
+          </div>
+
+          <div class="relative grid max-w-lg grid-cols-1 gap-6 mx-auto md:max-w-none lg:gap-10 md:grid-cols-3">
+
+            <!-- Review 1 -->
+            <div class="flex flex-col overflow-hidden shadow-xl">
+              <div class="flex flex-col justify-between flex-1 p-6 bg-white dark:bg-slate-700 lg:py-8 lg:px-7">
+                <div class="flex-1">
+                  <div class="flex items-center">
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  </div>
+                  <blockquote class="flex-1 mt-8">
+                    <p class="text-lg leading-relaxed text-gray-900 dark:text-slate-100">
+                      "The clothes are very nice, the fabric is soft, comfortable to wear, and the price is reasonable. I am very satisfied!"
+                    </p>
+                  </blockquote>
+                </div>
+                <div class="flex items-center mt-8">
+                  <img class="flex-shrink-0 object-cover rounded-full w-11 h-11"
+                       src="https://i.pinimg.com/736x/a1/fb/07/a1fb07c503c0b02244093d3671a95576.jpg" alt="">
+                  <div class="ml-4">
+                    <p class="text-base font-bold text-gray-900 dark:text-white">Leslie Alexander</p>
+                    <p class="mt-0.5 text-sm text-green-600 dark:text-green-400">Online</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Review 2 -->
+            <div class="flex flex-col overflow-hidden shadow-xl">
+              <div class="flex flex-col justify-between flex-1 p-6 bg-white dark:bg-slate-700 lg:py-8 lg:px-7">
+                <div class="flex-1">
+                  <div class="flex items-center">
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  </div>
+                  <blockquote class="flex-1 mt-8">
+                    <p class="text-lg leading-relaxed text-gray-900 dark:text-slate-100">
+                      The size fits well, the sewing is good, and the color is as beautiful as in the picture. Next time, it will support again!
+                    </p>
+                  </blockquote>
+                </div>
+                <div class="flex items-center mt-8">
+                  <img class="flex-shrink-0 object-cover rounded-full w-11 h-11"
+                       src="https://i.pinimg.com/736x/79/6d/09/796d091cf28b98d84eddef5c7d581685.jpg" alt="">
+                  <div class="ml-4">
+                    <p class="text-base font-bold text-gray-900 dark:text-white">Jacob Jones</p>
+                    <p class="mt-0.5 text-sm text-green-600 dark:text-green-400">Online</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Review 3 -->
+            <div class="flex flex-col overflow-hidden shadow-xl">
+              <div class="flex flex-col justify-between flex-1 p-6 bg-white dark:bg-slate-700 lg:py-8 lg:px-7">
+                <div class="flex-1">
+                  <div class="flex items-center">
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-[#FDB241]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  </div>
+                  <blockquote class="flex-1 mt-8">
+                    <p class="text-lg leading-relaxed text-gray-900 dark:text-slate-100">
+                      Good service, quick response, and fast delivery. Thank you very much!
+                    </p>
+                  </blockquote>
+                </div>
+                <div class="flex items-center mt-8">
+                  <img class="flex-shrink-0 object-cover rounded-full w-11 h-11"
+                       src="https://i.pinimg.com/736x/b9/09/7d/b9097d090c4fbddf110a32d608d8bda9.jpg" alt="">
+                  <div class="ml-4">
+                    <p class="text-base font-bold text-gray-900 dark:text-white">Jenny Wilson</p>
+                    <p class="mt-0.5 text-sm text-green-600 dark:text-green-400">Online</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </main>
+  <footer class="w-full bg-gradient-to-b from-yellow-50 to-amber-400 pt-16 pb-6 px-8 md:px-16 font-sans text-gray-900 transition-all duration-500 
+               dark:from-slate-900 dark:to-slate-950 dark:text-slate-100">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
+        
+        <!-- Explore Section -->
+        <div>
+          <h3 class="text-3xl font-bold mb-4 tracking-tight dark:text-white">Explore</h3>
+          <ul class="space-y-2 text-base font-medium">
+            <li><a href="./a.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Home</a></li>
+            <li><a href="./html/b.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Product</a></li>
+            <li><a href="./html/c.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Detail</a></li>
+            <li><a href="./html/d.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Cart</a></li>
+            <li><a href="./html/e.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Check out</a></li>
+            <li><a href="./html/f.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">About Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Address Section -->
+        <div>
+          <h3 class="text-xl font-black uppercase mb-4 tracking-wider dark:text-white">ADDRESS</h3>
+          <p class="text-base leading-relaxed font-medium opacity-80">
+            No. 41, Street 271, Sangkat<br>
+            Boeung Kak I, Khan Toul Kork,<br>
+            Phnom Penh, Cambodia
+          </p>
+        </div>
+
+        <!-- Contact Section -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 dark:text-white">Contact</h3>
+          <p class="text-base space-y-1 font-medium opacity-80">
+            <span class="block">eceaqr@gmail.com</span>
+            <span class="block">Phone: 012777771</span>
+          </p>
+        </div>
+
+        <!-- Newsletter Section -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 dark:text-white">Newsletter</h3>
+          <div class="flex max-w-sm rounded-lg overflow-hidden shadow-sm border dark:border-slate-700">
+            <input 
+              type="email" 
+              placeholder="Your email" 
+              class="w-full px-4 py-2 text-gray-700 bg-white placeholder-gray-400 focus:outline-none dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
+            >
+            <button class="bg-amber-400 hover:bg-amber-500 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:text-white font-semibold px-6 py-2 transition-colors border-l border-amber-300 dark:border-indigo-500">
+              Send
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Copyright Section -->
+      <div class="border-t border-amber-500/20 dark:border-slate-800 pt-6 text-center text-sm font-medium tracking-wide opacity-60">
+        &copy;2026 Urban Style Cambodia. Designed with 💖 .
+      </div>
+
+    </div>
+</footer>
+    <script>
+    // FIX 3: Updated Logic to work with Tailwind 'class' mode
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const themeBtns = [document.getElementById('dark-mode-toggle'), document.getElementById('dark-mode-toggle-mobile')];
+    const themeIcon = document.getElementById('theme-icon');
+    const mobileThemeIcon = document.getElementById('dark-mode-toggle-mobile');
+    const htmlEl = document.documentElement;
+
+    // Mobile Menu
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Dark Mode function
+    function updateTheme(isDark) {
+      if (isDark) {
+        htmlEl.classList.add('dark');
+        themeIcon.textContent = '☀️';
+        mobileThemeIcon.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        htmlEl.classList.remove('dark');
+        themeIcon.textContent = '🌙';
+        mobileThemeIcon.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    // Load saved preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      updateTheme(true);
+    }
+
+    // Toggle click listeners
+    themeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const isDark = htmlEl.classList.contains('dark');
+        updateTheme(!isDark);
+      });
+    });
+  </script>
+</body>
+</html>

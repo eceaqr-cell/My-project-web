@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Look At Me - Checkout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+    /* ── 1. កំណត់ CSS Variables សម្រាប់ប្តូរពណ៌តាម Mode ── */
+    :root {
+      --bg-body: #f3f4f6;
+      --form-bg: #ffffff;
+      --input-bg: #ffffff;
+      --input-border: #d1d5db;
+      --text-main: #1f2937;
+      --text-label: #4b5563;
+      --nav-gradient: linear-gradient(to right, #4f46e5, #9333ea, #ec4899);
+    }
+
+    .dark {
+      --bg-body: #0f172a;
+      --form-bg: #1e293b;
+      --input-bg: #334155;
+      --input-border: #475569;
+      --text-main: #f1f5f9;
+      --text-label: #cbd5e1;
+      --nav-gradient: linear-gradient(to right, #1e1b4b, #312e81, #4c1d95);
+    }
+
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background-color .3s, color .3s, border-color .3s;
+    }
+
+    body { background: var(--bg-body); color: var(--text-main); }
+
+    .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; display: flex; justify-content: center; }
+
+    .container form {
+      width: 100%;
+      padding: 40px;
+      background: var(--form-bg);
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    .column .title {
+      font-size: 22px;
+      color: var(--text-main);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      font-weight: 800;
+      border-bottom: 2px solid #8175d3;
+      display: inline-block;
+    }
+
+    .input-box { margin: 15px 0; }
+    .input-box span { display: block; margin-bottom: 8px; color: var(--text-label); font-weight: 500; }
+
+    .input-box input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--text-main);
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .input-box input:focus { border-color: #8175d3; ring: 2px solid #8175d3; }
+
+    .input-box img {
+      width: 100%; max-width: 300px; margin-top: 10px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+      border-radius: 5px;
+    }
+
+    form .btn {
+      width: 100%; padding: 15px;
+      background: #8175d3; color: #fff;
+      border: none; border-radius: 8px;
+      font-size: 18px; font-weight: bold;
+      margin-top: 20px; cursor: pointer;
+      transition: all .3s;
+    }
+
+    form .btn:hover { background: #6a5acd; transform: translateY(-2px); }
+
+    #main-nav { background: var(--nav-gradient); }
+
+    @media (max-width: 768px) {
+      .row { flex-direction: column; }
+      .container form { padding: 20px; }
+    }
+    </style>
+</head>
+<body>
+    <!-- Nav -->
+    <nav id="main-nav" class="shadow-lg transition-all duration-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex-shrink-0 text-white text-4xl font-bold">
+          <a href="#" class="hover:text-yellow-300 transition text-2xl">LOOK AT ME</a>
+        </div>
+
+        <div class="hidden md:flex space-x-6 text-white font-medium">
+          <a href="../a.html" class="hover:text-yellow-300 transition text-xl">Home</a>
+          <a href="b.html" class="hover:text-yellow-300 transition text-xl">Product</a>
+          <a href="c.html" class="hover:text-yellow-300 transition text-xl">Detail</a>
+          <a href="d.html" class="hover:text-yellow-300 transition text-xl">Cart</a>
+          <a href="e.html" class="hover:text-yellow-300 transition text-xl">Check Out</a>
+          <a href="f.html" class="hover:text-yellow-300 transition text-xl">About Us</a>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-4">
+          <button id="dark-mode-toggle" class="p-2 rounded-full bg-white/20 hover:bg-white/40 text-white transition">
+            <span id="theme-icon">🌙</span>
+          </button>
+          <a href="Login.html" class="bg-white text-indigo-700 px-4 py-2 rounded-xl hover:bg-yellow-300 transition-all font-bold text-xl">Log in</a>
+        </div>
+
+        <div class="md:hidden flex items-center gap-4">
+          <button id="dark-mode-toggle-mobile" class="text-white text-xl">🌙</button>
+          <button id="menu-toggle" class="text-white focus:outline-none text-3xl">☰</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2 text-white border-t border-white/20">
+      <a href="../a.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Home</a>
+      <a href="b.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Product</a>
+      <a href="c.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Detail</a>
+      <a href="d.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Cart</a>
+      <a href="e.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">Check Out</a>
+      <a href="f.html" class="block py-2 hover:text-yellow-300 transition font-bold text-xl">About Us</a>
+      <a href="Login.html" class="block bg-white text-indigo-700 text-center px-4 py-2 rounded-xl mt-4 font-bold text-xl">Log in</a>
+    </div>
+  </nav>
+
+    <main>
+      <div class="container">
+        <form action="">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <!-- Billing Column -->
+            <div class="column">
+              <h3 class="title">Billing Address</h3>
+              <div class="input-box">
+                <span>Full name :</span>
+                <input type="text" placeholder="Socheat Sochetra">
+              </div>
+              <div class="input-box">
+                <span>Email :</span>
+                <input type="email" placeholder="chtrea@emai.com">
+              </div>
+              <div class="input-box">
+                <span>Address :</span>
+                <input type="text" placeholder="Room - street - locality">
+              </div>
+              <div class="input-box">
+                <span>City :</span>
+                <input type="text" placeholder="Phnom Penh">
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="input-box">
+                  <span>State :</span>
+                  <input type="text" placeholder="Cambodia">
+                </div>
+                <div class="input-box">
+                  <span>Zip code :</span>
+                  <input type="text" placeholder="12000">
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Column -->
+            <div class="column">
+              <h3 class="title">Payment</h3>
+              <div class="input-box">
+                <span>Cards Accepted :</span>
+                <img src="https://ashcourt.com/img/paypal.jpg" alt="Payment Methods">
+              </div>
+              <div class="input-box">
+                <span>Name on card :</span>
+                <input type="text" placeholder="MR. CHETRA">
+              </div>
+              <div class="input-box">
+                <span>Credit Card Number :</span>
+                <input type="text" placeholder="1111-2222-3333-4444">
+              </div>
+              <div class="input-box">
+                <span>Exp. Month :</span>
+                <input type="text" placeholder="August">
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="input-box">
+                  <span>Exp. year :</span>
+                  <input type="text" placeholder="2028">
+                </div>
+                <div class="input-box">
+                  <span>CVV :</span>
+                  <input type="text" placeholder="123">
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn">Proceed to Checkout</button>
+        </form>
+      </div>
+    </main>
+
+    <!-- Footer -->
+  <footer class="w-full bg-gradient-to-b from-yellow-50 to-amber-400 pt-16 pb-6 px-8 md:px-16 font-sans text-gray-900 transition-all duration-500 
+               dark:from-slate-900 dark:to-slate-950 dark:text-slate-100">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
+        
+        <!-- Explore Section -->
+        <div>
+          <h3 class="text-3xl font-bold mb-4 tracking-tight dark:text-white">Explore</h3>
+          <ul class="space-y-2 text-base font-medium">
+            <li><a href="../a.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Home</a></li>
+            <li><a href="b.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Product</a></li>
+            <li><a href="c.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Detail</a></li>
+            <li><a href="d.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Cart</a></li>
+            <li><a href="e.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">Check out</a></li>
+            <li><a href="f.html" class="hover:underline hover:text-indigo-600 dark:hover:text-amber-400">About Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Address Section -->
+        <div>
+          <h3 class="text-xl font-black uppercase mb-4 tracking-wider dark:text-white">ADDRESS</h3>
+          <p class="text-base leading-relaxed font-medium opacity-80">
+            No. 41, Street 271, Sangkat<br>
+            Boeung Kak I, Khan Toul Kork,<br>
+            Phnom Penh, Cambodia
+          </p>
+        </div>
+
+        <!-- Contact Section -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 dark:text-white">Contact</h3>
+          <p class="text-base space-y-1 font-medium opacity-80">
+            <span class="block">eceaqr@gmail.com</span>
+            <span class="block">Phone: 012777771</span>
+          </p>
+        </div>
+
+        <!-- Newsletter Section -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 dark:text-white">Newsletter</h3>
+          <div class="flex max-w-sm rounded-lg overflow-hidden shadow-sm border dark:border-slate-700">
+            <input 
+              type="email" 
+              placeholder="Your email" 
+              class="w-full px-4 py-2 text-gray-700 bg-white placeholder-gray-400 focus:outline-none dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
+            >
+            <button class="bg-amber-400 hover:bg-amber-500 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:text-white font-semibold px-6 py-2 transition-colors border-l border-amber-300 dark:border-indigo-500">
+              Send
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Copyright Section -->
+      <div class="border-t border-amber-500/20 dark:border-slate-800 pt-6 text-center text-sm font-medium tracking-wide opacity-60">
+        &copy;2026 Urban Style Cambodia. Designed with 💖 .
+      </div>
+
+    </div>
+</footer>
+
+    <script>
+      // Dark Mode Logic
+      const themeBtns = [document.getElementById('dark-mode-toggle'), document.getElementById('dark-mode-toggle-mobile')];
+      const htmlEl = document.documentElement;
+
+      function updateTheme(isDark) {
+        if (isDark) {
+          htmlEl.classList.add('dark');
+          document.querySelectorAll('#theme-icon, #dark-mode-toggle-mobile').forEach(i => i.textContent = '☀️');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          htmlEl.classList.remove('dark');
+          document.querySelectorAll('#theme-icon, #dark-mode-toggle-mobile').forEach(i => i.textContent = '🌙');
+          localStorage.setItem('theme', 'light');
+        }
+      }
+
+      if (localStorage.getItem('theme') === 'dark') updateTheme(true);
+      themeBtns.forEach(btn => btn.addEventListener('click', () => updateTheme(!htmlEl.classList.contains('dark'))));
+
+      // Mobile Menu
+      document.getElementById('menu-toggle').addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+    </script>
+</body>
+</html>
